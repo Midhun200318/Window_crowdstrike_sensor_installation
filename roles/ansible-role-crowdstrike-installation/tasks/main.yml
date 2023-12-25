@@ -22,4 +22,21 @@
     - name: Display the Service Status Report
       debug:
         vars: service_result
+
+    - name: Copy Crowdstrike Agent to Target Server
+      win_copy: 
+        src: 
+        dest: C:/Atos/Tools/
+
+    - name: Run Crowdstrike Agent Installation
+      win_shell: |
+        Start-Process -FilePath ""C:\Atos\Tools\WindowsSensor.LionLanner.exe"" -ArgumentList ""/install /quiet /norestart APP_PROXYNAME=internet.services.royalmailgroup.net APP_PROXYPORT=8080 ProvNoWait=1 PROXYDISABLE=1 CID=960DBDCEAB1F43618092B6DB574A95C5-C6"" -Wait"
+
+    - name: Confirm Agent Installation
+      win_shell: sc.exe query csagent
+      register: agent_installation_result
+
+    - name: Debug Agent Installation Result
+      debug:
+        var: agent_installation_result
       
