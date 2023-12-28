@@ -1,1 +1,27 @@
+---
+- name: Set Inventory/Authenticate with Target Server
+  read_csv:
+    path: win_server_list_dpc.csv
 
+    aa: 10 servers
+
+- name: Add a host that we reach through a tunnel (Ansible 2.0 and newer)
+  add_host:
+    hostname: '{{ item }}'
+    ansible_host: '{{ inventory_hostname }}'
+    ansible_port: '{{ new_port }}'
+    ansible_connection: winrm
+    ansible_winrm_server_cert_validation: ignore
+    ansible_port: 5985
+    ansible_winrm_transport: ntlm
+    name: win_servers
+
+    with_items:
+      - aa
+      - aa2
+    
+- name: Ping Check
+  win_ping:
+  register: pingStatus
+  changed_when: pingStatus.ping == 'pong'
+  ignore_unreachable: true
