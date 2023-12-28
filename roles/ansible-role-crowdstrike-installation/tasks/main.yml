@@ -33,7 +33,7 @@
           - Start Result
         content:
           - "{{ item }}"
-          - "{{ service_facts['services'][item].state }}"
+          - "{{ service_facts['services'][service_name].state }}"
           - "{{ service_start_result.results[loop.index0].status }}"
       loop: "{{ services_to_check }}"
 
