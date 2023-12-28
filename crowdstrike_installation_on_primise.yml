@@ -7,10 +7,11 @@
       
     - name: create Inventory with domain user
       include_role:
-        name: ansible-role-dpc-virtual-inventory-with-domain-user
+        name: ansible-role-virtual-inventory-on-premise
+
   
 - name: playbook to install crowd strike agent on DPC servers
-  hosts: dpc_win_servers
+  hosts: 
   gather_facts: true
   become_method: runas
   ignore_unreachable: true
