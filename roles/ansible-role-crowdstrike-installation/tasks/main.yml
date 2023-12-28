@@ -69,7 +69,7 @@
         
     - name: Email report
       mail:
-        host: ansible_Automation_host
+        host: 
         port: 25
         subject: "Ansible Automation Report"
         body: "The Ansible automation has completed successfully."
