@@ -1,1 +1,5 @@
-
+services_to_check:
+  - LMHosts
+  - "Network Store Interface"
+  - "Windows Base Filtering Engine"
+  - "Windows Power Service"
