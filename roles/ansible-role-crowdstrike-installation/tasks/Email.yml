@@ -1,1 +1,8 @@
-
+    - name: Email report
+      mail:
+        host: 
+        port: 25
+        subject: "Ansible Automation Report"
+        body: "The Ansible automation has completed successfully."
+        sender: "automation@example.com"
+        recipients: "admin@example.com"
