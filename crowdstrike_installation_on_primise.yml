@@ -1,1 +1,33 @@
-
+--- 
+- name: Playbook to Create windows virtual Inventory for Windows DPC servers
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+      
+    - name: create Inventory with domain user
+      include_role:
+        name: ansible-role-dpc-virtual-inventory-with-domain-user
+  
+- name: playbook to install crowd strike agent on DPC servers
+  hosts: dpc_win_servers
+  gather_facts: true
+  become_method: runas
+  ignore_unreachable: true
+  become_user: SVC_APP_Ansible_02
+  tasks:
+      
+    - name: role to install crowdstrike
+      include_role:
+        name: ansible-role-crowdstrike-installation
+        
+- name: Playbook to send Crowdstrike installation status report
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+ 
+    - name: sending report via mail
+      include_role:
+        name: ansible-role-crowdstrike-installation
+        tasks_from: Email.yml
