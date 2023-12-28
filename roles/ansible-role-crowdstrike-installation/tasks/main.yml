@@ -35,6 +35,10 @@
           - "{{ item }}"
           - "{{ service_result.results[loop.index].state }}"
           {% endfor %}
+
+    - name: Include CrowdStrike variables
+      include_vars:
+        file: crowdstrike_variables.yml
      
     - name: Copy Crowdstrike Agent to Target Server
       win_copy: 
