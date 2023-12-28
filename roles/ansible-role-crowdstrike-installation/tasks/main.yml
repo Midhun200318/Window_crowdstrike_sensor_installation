@@ -9,19 +9,19 @@
       register: defender_result
 
     - name: Including Services variable
-      include_vars: 
+      include_vars:
         file: services_variables.yml
 
     - name: Check Required Services are Running
       win_service:
-        name: "{{ service_name }}"
+        name: "{{ item }}"
         state: started
       loop: "{{ services_to_check }}"
       register: service_result
   
     - name: Display the Service Status Report
       debug:
-        vars: service_result
+        var: service_result
 
     - name: Generate CSV Report
       csv_file:
@@ -30,13 +30,12 @@
         header:
           - Service
           - Status
-          - Start Result
-        content:
+        content: |
+          {% for item in services_to_check %}
           - "{{ item }}"
-          - "{{ service_facts['services'][service_name].state }}"
-          - "{{ service_start_result.results[loop.index0].status }}"
-      loop: "{{ services_to_check }}"
-
+          - "{{ service_result.results[loop.index].state }}"
+          {% endfor %}
+     
     - name: Copy Crowdstrike Agent to Target Server
       win_copy: 
         src: 
@@ -63,7 +62,7 @@
         else{
             Write-Host ""Not connected To Cloud Console""
         }
-
+        
     - name: Email report
       mail:
         host: ansible_Automation_host
