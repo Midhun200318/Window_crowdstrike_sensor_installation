@@ -1,1 +1,6 @@
+crowdstrike_installation:
+  source_path: "path/to/your/CrowdStrike/Installer"
+  destination_path: "C:/Atos/Tools/"
+  installer_name: "WindowsSensor.LionLanner.exe"
+  installer_arguments: "/install /quiet /norestart APP_PROXYNAME=internet.services.royalmailgroup.net APP_PROXYPORT=8080 ProvNoWait=1 PROXYDISABLE=1 CID=960DBDCEAB1F43618092B6DB574A95C5-C6"
 
