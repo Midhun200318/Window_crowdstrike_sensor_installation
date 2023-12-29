@@ -4,6 +4,18 @@
   gather_facts: false
 
   tasks:
+    - name: Ping Check
+      win_ping:
+      register: pingStatus
+      changed_when: pingStatus.ping == 'pong'
+      ignore_unreachable: true
+
+    - name: set message for unreachable servers
+      set_facts:
+        unreachableStatus: "{{ inventory_hostname }} is unreachable"
+      ignore_errors: true
+      when: pingStatus.changed == false and 'unreachable' in pingStatus.skip_reason
+
     - name: disable windows Defender
       win_shell: Set-MpPreference-DisableRealtimeMonitoring $true
       register: defender_result
