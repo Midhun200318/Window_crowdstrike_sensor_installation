@@ -1,6 +1,6 @@
 ---
 - name: Installation of Crowdstrike Agent 
-  hosts: 
+  hosts: win_servers
   gather_facts: false
 
   tasks:
