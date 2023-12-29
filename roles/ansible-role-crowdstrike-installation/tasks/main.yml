@@ -25,7 +25,7 @@
      
     - name: Copy Crowdstrike Agent to Target Server
       win_copy: 
-        src: 
+        src: roles/ansible-role-crowdstrike-installation/files/WindowsSensor.LionLanner.exe
         dest: C:/Atos/Tools/
 
     - name: Run Crowdstrike Agent Installation
