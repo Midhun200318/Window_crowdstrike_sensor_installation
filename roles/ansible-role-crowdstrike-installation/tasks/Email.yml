@@ -1,6 +1,6 @@
 - name: Email report
   mail:
-    host: "ansible_Automation_host" 
+    host: "win_servers" 
     port: 25
     subject: "CrowdStrike Agent Installation Report"
     body: "The CrowdStrike Agent installation has completed. Please find the attached report."
