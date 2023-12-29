@@ -11,7 +11,7 @@
 
   
 - name: playbook to install crowd strike agent on DPC servers
-  hosts: 
+  hosts: win_servers
   gather_facts: true
   become_method: runas
   ignore_unreachable: true
