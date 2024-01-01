@@ -1,9 +1,4 @@
 ---
-- name: Installation of Crowdstrike Agent 
-  hosts: win_servers
-  gather_facts: false
-
-  tasks:
     - name: Ping Check
       win_ping:
       register: pingStatus
