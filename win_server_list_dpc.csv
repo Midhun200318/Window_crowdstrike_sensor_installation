@@ -1,3 +1,4 @@
-Hostname,ip_iddress
-Test_server,1.1.1.1
-Test_server_2,1.1.1.2
+ip_iddress,Hostname
+10.130.53.38,RMLBBPCST000Test01
+10.130.53.21,RMLBBPCST0001Test02
+10.130.53.40,RMLBBPCST0004Test03
