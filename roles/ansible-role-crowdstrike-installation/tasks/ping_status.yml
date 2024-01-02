@@ -1,1 +1,12 @@
+---
+    - name: Ping Check
+      win_ping:
+      register: pingStatus
+      changed_when: pingStatus.ping == 'pong'
+      ignore_unreachable: true
 
+    - name: set message for unreachable servers
+      set_facts:
+        unreachableStatus: "{{ item.0 }} is unreachable"
+      ignore_errors: true
+      when: pingStatus.changed == false and 'unreachable' in pingStatus.skip_reason
