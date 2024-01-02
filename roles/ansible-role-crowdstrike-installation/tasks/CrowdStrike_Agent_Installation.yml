@@ -1,17 +1,13 @@
- - name: Including Services variable
-   include_vars:
-     file: services_variables.yml
-     
  - name: Check Required Services are Running
    win_service:
      name: "{{ item }}"
      state: started
-   loop: "{{ services_to_check }}"
+   with_items:
+     - LMHosts
+     - Network Store Interface
+     - Windows Base Filtering Engine
+     - Windows Power Service
    register: service_result
-
- - name: Include CrowdStrike variables
-   include_vars:
-     file: crowdstrike_variables.yml
      
  - name: Copy Crowdstrike Agent to Target Server
    win_copy: 
