@@ -1,41 +1,41 @@
  - name: Including Services variable
-      include_vars:
-        file: services_variables.yml
-
-    - name: Check Required Services are Running
-      win_service:
-        name: "{{ item }}"
-        state: started
-      loop: "{{ services_to_check }}"
-      register: service_result
-
-    - name: Include CrowdStrike variables
-      include_vars:
-        file: crowdstrike_variables.yml
+   include_vars:
+     file: services_variables.yml
      
-    - name: Copy Crowdstrike Agent to Target Server
-      win_copy: 
-        src: roles/ansible-role-crowdstrike-installation/files/WindowsSensor.LionLanner.exe
-        dest: C:/Atos/Tools/
+ - name: Check Required Services are Running
+   win_service:
+     name: "{{ item }}"
+     state: started
+   loop: "{{ services_to_check }}"
+   register: service_result
 
-    - name: Run Crowdstrike Agent Installation
-      win_shell: |
-        Start-Process -FilePath ""C:\Atos\Tools\WindowsSensor.LionLanner.exe"" -ArgumentList ""/install /quiet /norestart APP_PROXYNAME=internet.services.royalmailgroup.net APP_PROXYPORT=8080 ProvNoWait=1 PROXYDISABLE=1 CID=960DBDCEAB1F43618092B6DB574A95C5-C6"" -Wait"
+ - name: Include CrowdStrike variables
+   include_vars:
+     file: crowdstrike_variables.yml
+     
+ - name: Copy Crowdstrike Agent to Target Server
+   win_copy: 
+     src: roles/ansible-role-crowdstrike-installation/files/WindowsSensor.LionLanner.exe
+     dest: C:/Atos/Tools/
 
-    - name: Confirm Agent Installation
-      win_shell: sc.exe query csagent
-      register: agent_installation_result
+ - name: Run Crowdstrike Agent Installation
+   win_shell: |
+     Start-Process -FilePath ""C:\Atos\Tools\WindowsSensor.LionLanner.exe"" -ArgumentList ""/install /quiet /norestart APP_PROXYNAME=internet.services.royalmailgroup.net APP_PROXYPORT=8080 ProvNoWait=1 PROXYDISABLE=1 CID=960DBDCEAB1F43618092B6DB574A95C5-C6"" -Wait"
 
-    - name: Debug Agent Installation Result
-      debug:
-        var: agent_installation_result
+ - name: Confirm Agent Installation
+   win_shell: sc.exe query csagent
+   register: agent_installation_result
 
-    - name: Check sensor is connected to cloud or not
-      win_shell: |
-        $netstatOutput = netstat -f
-        if ($netstatOutput -match ""rmgp\.royalmailgroup\.net:8080.*ESTABLISHED"") {
-            Write-Host ""Connected To Cloud Console ""
-        }
-        else{
-            Write-Host ""Not connected To Cloud Console""
-        }
+ - name: Debug Agent Installation Result
+   debug:
+     var: agent_installation_result
+
+ - name: Check sensor is connected to cloud or not
+   win_shell: |
+     $netstatOutput = netstat -f
+     if ($netstatOutput -match ""rmgp\.royalmailgroup\.net:8080.*ESTABLISHED"") {
+         Write-Host ""Connected To Cloud Console ""
+     }
+     else{
+         Write-Host ""Not connected To Cloud Console""
+     }
