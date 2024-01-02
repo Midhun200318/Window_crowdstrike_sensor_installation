@@ -1,1 +1,74 @@
+---
+- name: Creating directory to copy script
+  win_file:
+    path: "{{ to_copy_script }}"
+    state: directory
+    mode: '0777'
+  register: directoryStatus
+  when: ping_output.changed == true
+  
+- name: Creating an empty CSV file 
+  win_file:
+    path: "{{ to_copy_script }}Crowd_Strike_agent_Report_{{ansible_hostname}}.csv"
+    state: touch
+    mode: '0777'
+  register: csvStatus
+  when: ping_output.changed == true
+  
+- name: Copy template to location
+  win_template:
+    src: ../template/crowd_strike_report_template.csv.j2
+    dest: '{{ to_copy_script }}Crowd_Strike_agent_Report_{{ansible_hostname}}.csv'
+    mode: 0777
+  register: templateStatus
+  ignore_errors: yes
+  when: ping_output.changed == true
+  
+- name: Creates directory on execution node to store QA files
+  file:
+    path: "{{output_execution_node}}"
+    state: directory
+    recurse: yes 
+    mode: '0777'
+  delegate_to: localhost
+  run_once: true
 
+- name: fetch all files from target server to exe node
+  fetch:
+    src: '{{ to_copy_script }}Crowd_Strike_agent_Report_{{ansible_hostname}}.csv'
+    dest: '{{output_execution_node}}Crowd_Strike_agent_Report_{{ansible_hostname}}.csv'
+    flat: yes
+  register: fetched_file_output
+  when: ping_output.changed == true
+  
+- name: Delete copied files from each server
+  win_file:
+    path: "{{ to_copy_script }}"
+    state: absent
+  when: fetched_file_output is success and ping_output.changed == true
+
+- name: Delete duplicate entries and headers
+  shell: awk 'FNR==1 && NR!=1{next;}{print}' "{{output_execution_node}}"Crowd_Strike_agent_Report*.csv > "{{output_execution_node}}"Final_Crowd_Strike_agent_Report.csv
+  delegate_to: localhost
+  register: final_output
+  run_once: true
+
+- name: Giving permissions to file
+  command: chmod 777 "{{output_execution_node}}"Final_Crowd_Strike_agent_Report.csv
+  delegate_to: localhost
+  run_once: true
+
+- name: Delete csv files from execution node
+  file:
+      path: "{{output_execution_node}}Crowd_Strike_agent_Report_{{ansible_hostname}}.csv"
+      state: absent
+  delegate_to: localhost
+  when: ping_output.changed == true
+
+- name: Inserting reason for unreachable servers
+  lineinfile:
+    path: "{{ output_execution_node }}Final_Crowd_Strike_agent_Report.csv"
+    line: "N/A,N/A,N/A,N/A,N/A,N/A,{{ inventory_hostname }},N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,{{serverStatus}}"
+    insertafter: EOF
+  delegate_to: localhost
+  when: ping_output.changed == false
