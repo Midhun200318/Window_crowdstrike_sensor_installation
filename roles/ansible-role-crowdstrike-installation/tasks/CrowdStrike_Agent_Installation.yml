@@ -42,3 +42,8 @@
          Write-Host ""Not connected To Cloud Console""
      }
    register: sensor_connection_result
+
+  - set_fact:
+      Sensor_cloud_status_post: "{{ sensor_connection_result.stdout }}"
+
+   
