@@ -15,6 +15,7 @@
      dest: C:/Atos/Tools/
    ignore_errors: yes  
    register: copy_result
+   
 
  - name: Run Crowdstrike Agent Installation
    win_shell: |
@@ -23,6 +24,9 @@
  - name: Confirm Agent Installation
    win_shell: sc.exe query csagent
    register: agent_installation_result
+
+ - set_fact:
+     crowdStrikeStatus: "{{ agent_installation_result.stdout }}"
 
  - name: Debug Agent Installation Result
    debug:
