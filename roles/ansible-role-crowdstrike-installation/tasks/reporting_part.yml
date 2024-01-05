@@ -68,7 +68,7 @@
 - name: Inserting reason for unreachable servers
   lineinfile:
     path: "{{ output_execution_node }}Final_Crowd_Strike_agent_Report.csv"
-    line: "N/A,N/A,N/A,N/A,N/A,N/A,{{ inventory_hostname }},N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,{{serverStatus}}"
+    line: "{{ inventory_hostname }},N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,{{serverStatus}}"
     insertafter: EOF
   delegate_to: localhost
   when: ping_output.changed == false
