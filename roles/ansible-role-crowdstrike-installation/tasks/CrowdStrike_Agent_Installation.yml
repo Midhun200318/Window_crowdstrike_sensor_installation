@@ -13,6 +13,8 @@
    win_copy: 
      src: roles/ansible-role-crowdstrike-installation/files/WindowsSensor.LionLanner.exe
      dest: C:/Atos/Tools/
+   ignore_errors: yes  
+   register: copy_result
 
  - name: Run Crowdstrike Agent Installation
    win_shell: |
@@ -35,3 +37,4 @@
      else{
          Write-Host ""Not connected To Cloud Console""
      }
+   register: sensor_connection_result
