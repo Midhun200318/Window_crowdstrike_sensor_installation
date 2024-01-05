@@ -1,12 +1,7 @@
-- name: Email report
-  mail:
-    host: "win_servers" 
-    port: 25
-    subject: "CrowdStrike Agent Installation Report"
-    body: "The CrowdStrike Agent installation has completed. Please find the attached report."
-    sender: "automation@example.com"
-    recipients: "admin@example.com"
-    attach:
-      - path: "{{ output_execution_node }}Final_Crowd_Strike_agent_Report.csv"
-        filename: "Final_Crowd_Strike_agent_Report.csv"
-  when: ping_output.changed == true
+to_copy_script: C:\Temp\crowd_strike\
+output_execution_node: /tmp/crowd_strike_win/
+SMTP_server_host: smtp.services.royalmailgroup.net
+execution_path_server_status: /tmp/crowd_unreachable_servers
+mail_from: AnsibleAutomation@royalmail.com
+mail_to:
+    - midhun.m.external@atos.net
